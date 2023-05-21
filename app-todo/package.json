@@ -38,5 +38,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devServer": {
+    "proxy": {
+        "/api/*":{
+            "target":"http://localhost:3001/",
+            "secure":"false"
+        }
+    }
+}
 }
