@@ -72,10 +72,12 @@ def add_todo():
         print("\n")
     return 'Successfully added new task', 201
 
+
 @app.route('/api/todo-app/<id>', methods=['PUT'])
 def edit_todo(id):
 
     return '', 201
+
 
 @app.route('/api/todo-app/<id>', methods=['DELETE'])
 def delete_todo(id):
