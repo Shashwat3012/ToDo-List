@@ -57,18 +57,20 @@ def add_todo():
     # return '', 201
     print("helloooo I am here!!!!!!")
     try:
-        result = todos_collection.insert_many(recipe_documents)
-    # return a friendly error if the operation fails
+        new_todo = request.json['text']
+        print(new_todo)
+        #task = {"task": new_todo, "added_time": , "completed_time": }
+        todos_collection.insert_one({'text': new_todo})
+        # result = todos_collection.insert_many(recipe_documents)
+    # returning a friendly error if the operation fails
     except pymongo.errors.OperationFailure:
         print(
-            "An authentication error was received. Are you sure your database user is authorized to perform write operations?")
+            "An error was received while adding a new record.")
         sys.exit(1)
     else:
-        inserted_count = len(result.inserted_ids)
-        print("I inserted %x documents." % (inserted_count))
-
+        print("I inserted a new record")
         print("\n")
-    return '', 201
+    return 'Successfully added new task', 201
 
 @app.route('/api/todo-app/<id>', methods=['PUT'])
 def edit_todo(id):
@@ -89,4 +91,4 @@ def sort_todo(id):
 
 if __name__ == '__main__':
     # app.run()
-    app.run(host="0.0.0.0", port=3000)
+    app.run(host="0.0.0.0", port=3001)
