@@ -1,4 +1,3 @@
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sys
@@ -30,13 +29,6 @@ count = 1
 def get_todo():
     todo = list(todos_collection.find({}, {'_id': False}))
     return jsonify(todo)
-
-    # task = collection.find_one({"_id": task_id})
-    # if task:
-    #     print("Title:", task["title"])
-    #     print("Description:", task["description"])
-    # else:
-    #     print("Task not found.")
 
 
 @app.route('/api/todo-app', methods=['POST'])
@@ -74,8 +66,14 @@ def edit_todo(id):
 
 @app.route('/api/todo-app/<id>', methods=['DELETE'])
 def delete_todo(id):
-    todos_collection.delete_one({'_id': id})
-    return '', 204
+    #    db.todos_collection.remove({'_id': id})
+    print(id)
+    myquery = {"id": id}
+    x = todos_collection.delete_many(myquery)
+    print(x)
+    #db.todos_collection.delete_one({'id': id})
+    return 'Deleted Successfully', 204
+
 
 if __name__ == '__main__':
     # app.run()
