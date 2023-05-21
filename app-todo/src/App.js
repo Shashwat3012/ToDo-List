@@ -15,7 +15,7 @@ const App = () => {
     try {
       const response = await axios.get('http://localhost:3001/api/todo-app');
       response.data.forEach(data => {
-        setTasks([...tasks, data.text]);
+        setTasks([...tasks, data]);
        // setTasks(data);
       });
       
@@ -34,21 +34,27 @@ const App = () => {
     }
   };
 
-  const editTask = async () => {
-    try {
-      await axios.post('http://localhost:3001/api/todo-app', { "text": "newTodo" });
-      fetchTodos();
-      setNewTask('');
-    } catch (error) {
-      console.error(error);
-    }
+  const editTask = async (id) => {
+    //tasks.filter(t => t.id)
+    console.log(id);
+   setEditedTask(tasks.filter(t => t.id == id).at(0));
+    setEditMode(true);
+    console.log(editedTask);
+    // try {
+    //   await axios.post('http://localhost:3001/api/todo-app', { "text": "newTodo" });
+    //   fetchTodos();
+    //   setNewTask('');
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   const updateTask = async () => {
     try {
-      await axios.post('http://localhost:3001/api/todo-app', { "text": "newTodo" });
-      // fetchTodos();
-      // setNewTodo('');
+        console.log(editedTask.task);
+      //await axios.put('http://localhost:3001/api/todo-app/{id}',);
+      fetchTodos();
+      setNewTask('');
     } catch (error) {
       console.error(error);
     }
@@ -107,10 +113,12 @@ return (
         <button onClick={addTask} style={{ padding: '6px 12px', borderRadius: '4px', backgroundColor: '#4CAF50', color: '#fff', border: 'none' }}>Add Task</button>
       </div>
       <ul style={{ listStyleType: 'none', padding: '0' }}>
-        {tasks.map((task, index) => (
+        {tasks.map((taskObj, index) => (
           <li key={index} style={{ margin: '5px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <span style={{ flex: '1' }}>{task}</span>
-            <button onClick={() => editTask(index)} style={{ margin: '0 5px', padding: '4px 8px', backgroundColor: '#2196F3', color: '#fff', border: 'none', cursor: 'pointer' }}>Edit</button>
+            <span style={{ flex: '1' }}>{taskObj.id}</span>
+            <span style={{ flex: '1' }}>{taskObj.task}</span>
+            <span style={{ flex: '1' }}>{taskObj.added_time}</span>
+            <button onClick={() => editTask(taskObj.id)} style={{ margin: '0 5px', padding: '4px 8px', backgroundColor: '#2196F3', color: '#fff', border: 'none', cursor: 'pointer' }}>Edit</button>
             <button onClick={() => deleteTask(index)} style={{ margin: '0 5px', padding: '4px 8px', backgroundColor: '#f44336', color: '#fff', border: 'none', cursor: 'pointer' }}>Delete</button>
           </li>
         ))}
@@ -120,7 +128,7 @@ return (
           <>
             <input
               type="text"
-              value={editedTask}
+              value={editedTask.task}
               onChange={(e) => setEditedTask(e.target.value)}
               placeholder="Edit task"
               style={{ padding: '6px', marginRight: '5px', borderRadius: '4px', border: '1px solid #ccc' }}
